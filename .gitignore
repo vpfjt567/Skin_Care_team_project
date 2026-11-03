@@ -1,0 +1,22 @@
+# Dataset
+data/
+*.zip
+*.tar
+*.part0
+
+# Model weights
+*.pth
+*.pt
+*.ckpt
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Secrets
+.env
