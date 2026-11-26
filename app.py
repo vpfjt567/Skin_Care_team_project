@@ -14,7 +14,6 @@ from torchvision.models import (
 )
 from torchvision import transforms
 
-# 앱 파일과 같은 폴더에 있는 엑셀 파일을 사용합니다.
 BASE_DIR = Path(__file__).resolve().parent
 EXCEL_PATH = BASE_DIR / "Skin_Tumor_Disease_Guide.xlsx"
 
@@ -122,7 +121,6 @@ body,
     margin: 8px 0 16px;
 }
 
-/* 업로더 바탕은 투명하게 */
 [data-testid="stFileUploader"],
 [data-testid="stFileUploader"] > section,
 [data-testid="stFileUploader"] section {
@@ -137,39 +135,33 @@ body,
     color: #FFFFFF !important;
 }
 
-/* 찾아보기 버튼은 밝은 배경에서도 읽히도록 검정색 글씨 사용 */
 [data-testid="stFileUploader"] button,
 [data-testid="stFileUploader"] button * {
     color: #111111 !important;
 }
 
-/* 업로드된 파일 칩 배경 */
 [data-testid="stFileUploaderFile"],
 [data-testid="stFileUploaderFile"] > div {
     background-color: #D1D1D1 !important;
     border-radius: 6px !important;
 }
 
-/* 파일명과 파일 용량은 검정색 */
 [data-testid="stFileUploaderFile"] *,
 [data-testid="stFileUploaderFileName"],
 [data-testid="stFileUploaderFileSize"] {
     color: #111111 !important;
 }
 
-/* 파일 칩 안의 아이콘도 어둡게 */
 [data-testid="stFileUploaderFile"] svg {
     color: #333333 !important;
     fill: #333333 !important;
 }
 
-/* 업로드 영역의 + 아이콘 숨기기 */
 [data-testid="stFileUploader"] button[aria-label*="Add"],
 [data-testid="stFileUploader"] button[title*="Add"] {
     display: none !important;
 }
 
-/* 업로드 영역의 장식용 아이콘 숨기기 */
 [data-testid="stFileUploaderDropzoneInstructions"] svg {
     display: none !important;
 }
@@ -278,7 +270,6 @@ MODEL_FILES = sorted(
     key=lambda p: (p.name != "YOLO.pt", p.name.lower()),
 )
 
-# ImageFolder가 학습 노트북에서 만든 알파벳 순 클래스 순서와 동일합니다.
 SKIN_DISEASE_CLASSES = [
     "Actinic_Keratosis",
     "Basal_Cell_Carcinoma",
@@ -316,8 +307,6 @@ selected_model = st.sidebar.selectbox(
 def load_model(model_path):
     model_path = Path(model_path)
 
-    # Ultralytics 체크포인트는 EMA/model 객체를 포함합니다. 일반 PyTorch
-    # 분류 체크포인트는 state_dict이므로 확장자가 아니라 내용을 확인합니다.
     checkpoint = torch.load(
         model_path,
         map_location="cpu",
@@ -341,8 +330,6 @@ def load_model(model_path):
     if not isinstance(state, dict):
         raise ValueError("지원하지 않는 PyTorch 체크포인트 구조입니다.")
 
-    # ConvNeXt/EfficientNet 체크포인트는 순수 state_dict로 저장되어 클래스
-    # 메타데이터가 없으므로 학습 노트북의 ImageFolder 순서를 사용합니다.
     if not class_names and model_path.name in {
         "ConvNeXt-Tiny.pth",
         "EfficientNet-B3.pth",
@@ -543,7 +530,6 @@ def show_predictions(predictions):
         unsafe_allow_html=True,
     )
 
-    # 1위 예측 클래스에 해당하는 엑셀 행을 찾습니다.
     search_key = normalize_disease_name(top_prediction["name"])
     matched = disease_guide[
         disease_guide["병명_검색키"] == search_key
